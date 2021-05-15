@@ -1,4 +1,4 @@
-module github.com/J-HowHuang/Ramen-Live
+module github.com/J-HowHuang/Ramen-Live/backend
 
 go 1.16
 

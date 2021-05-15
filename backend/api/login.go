@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fmt"
+	"log"
 )
 
 func handleLogin(message map[string]interface{}) {
