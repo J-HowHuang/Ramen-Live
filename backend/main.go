@@ -7,9 +7,11 @@ import (
     "net/http"
 
     "github.com/gorilla/websocket"
+    "github.com/J-HowHuang/Ramen-Live/backend/api"
 )
 
 var payload map[string]interface{}
+// var message map[string]interface{}
 
 // We'll need to define an Upgrader
 // this will require a Read and Write buffer size
@@ -27,20 +29,30 @@ var upgrader = websocket.Upgrader{
 
 func reader(conn *websocket.Conn) {
     for {
-        messageType, p, err := conn.ReadMessage()
+        _, p, err := conn.ReadMessage()
         if err != nil {
             log.Println(err)
             return
         }
         fmt.Println(string(p))
-        if err := conn.WriteMessage(messageType, p); err != nil {
-            log.Println(err)
-            return
-        }
+        // if err := conn.WriteMessage(messageType, p); err != nil {
+        //     log.Println(err)
+        //     return
+        // }
         json.Unmarshal([]byte(p), &payload)
+        message, messageTypeCheck := payload["message"].(map[string]interface{}); 
+        if !messageTypeCheck {
+            log.Println("message type incorrect!")
+        }
         switch payload["task"] {
             case "login":
-                log.Println("login case")
+                log.Println("case login")
+                handleLogin(message)
+            case "getHomePage":
+                log.Println("case getHomePage")
+            case "getRamenShopDetail":
+                log.Println("case getRamenShopDetail")
+                
             default:
                 log.Println("default")
         }

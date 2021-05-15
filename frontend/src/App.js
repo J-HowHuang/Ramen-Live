@@ -22,7 +22,7 @@ class App extends Component {
     render() {
         return ( 
             <div className = "App">
-                <button onClick = { this.send }> Hit </button> 
+                <button onClick = { this.send  }> Hit   </button> 
                 <button onClick = { this.login }> Login </button> 
             </div>
         );
