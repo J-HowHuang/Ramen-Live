@@ -1,4 +1,4 @@
-package api
+package message_api
 
 import (
 	"log"

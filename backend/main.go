@@ -7,7 +7,8 @@ import (
     "net/http"
 
     "github.com/gorilla/websocket"
-    "github.com/J-HowHuang/Ramen-Live/backend/api"
+    // "github.com/J-HowHuang/Ramen-Live/backend/api@dev-backend"
+    . "github.com/J-HowHuang/Ramen-Live/backend/message_api"
 )
 
 var payload map[string]interface{}
@@ -44,6 +45,7 @@ func reader(conn *websocket.Conn) {
         if !messageTypeCheck {
             log.Println("message type incorrect!")
         }
+        log.Println(message)
         switch payload["task"] {
             case "login":
                 log.Println("case login")
