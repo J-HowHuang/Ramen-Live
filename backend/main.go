@@ -8,7 +8,7 @@ import (
 
     "github.com/gorilla/websocket"
     // "github.com/J-HowHuang/Ramen-Live/backend/api@dev-backend"
-    . "github.com/J-HowHuang/Ramen-Live/backend/message_api"
+    "github.com/J-HowHuang/Ramen-Live/backend/message_api"
 )
 
 var payload map[string]interface{}
@@ -49,7 +49,7 @@ func reader(conn *websocket.Conn) {
         switch payload["task"] {
             case "login":
                 log.Println("case login")
-                handleLogin(message)
+                HandleLogin(message)
             case "getHomePage":
                 log.Println("case getHomePage")
             case "getRamenShopDetail":

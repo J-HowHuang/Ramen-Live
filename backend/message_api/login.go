@@ -4,6 +4,10 @@ import (
 	"log"
 )
 
-func handleLogin(message map[string]interface{}) {
+func init() {
+	log.Println("successfully import")
+}
+
+func HandleLogin(message map[string]interface{}) {
 	log.Println(message["userid"])
 }
