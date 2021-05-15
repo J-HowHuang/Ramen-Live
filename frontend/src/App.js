@@ -5,7 +5,21 @@ import { connect, sendMsg } from "./api";
 class App extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            receive: []
+        }
         connect();
+    }
+
+    componentDidMount() {
+        connect((msg) => {
+            console.log("New Message")
+            console.log(msg)
+            this.setState(prevState => ({
+                receive: [...this.state.receive, msg.data + "\n"]
+            }))
+            console.log(this.state);
+        });
     }
 
     send() {
@@ -19,11 +33,27 @@ class App extends Component {
         sendMsg(JSON.stringify({ task, message }));
     }
 
+    getHomePage() {
+        var task = "getHomePage"
+        var message = { homepageshoplist : ["ggg", "pongstar", "ggb"] }
+        sendMsg(JSON.stringify({ task, message }));
+    }
+
+    getRamenShopDetail() {
+        var task = "getRamenShopDetail"
+        var message = { shopid : "ggg" }
+        sendMsg(JSON.stringify({ task, message }));
+    }
+
     render() {
         return ( 
             <div className = "App">
-                <button onClick = { this.send  }> Hit   </button> 
-                <button onClick = { this.login }> Login </button> 
+                <button onClick = { this.send  }>               Hit                 </button> 
+                <button onClick = { this.login }>               Login               </button> 
+                <button onClick = { this.getHomePage }>         GetHomePage         </button> 
+                <button onClick = { this.getRamenShopDetail }>  GetRamenShopDetail  </button> 
+
+                <p> { this.state.receive } </p>
             </div>
         );
     }

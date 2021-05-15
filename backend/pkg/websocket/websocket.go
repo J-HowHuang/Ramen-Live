@@ -6,8 +6,8 @@ import (
 	"log"
 	"encoding/json"
     "net/http"
-
-    "github.com/gorilla/websocket"
+	"github.com/gorilla/websocket"
+	"github.com/J-HowHuang/Ramen-Live/backend/pkg/api"
 )
 
 var upgrader = websocket.Upgrader{
@@ -27,29 +27,40 @@ func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 
 func Reader(conn *websocket.Conn) {
     for {
-        _, p, err := conn.ReadMessage()
+        messageType, p, err := conn.ReadMessage()
         if err != nil {
             log.Println(err)
             return
         }
-        fmt.Println(string(p))
+		fmt.Println(string(p))
+		
         // if err := conn.WriteMessage(messageType, p); err != nil {
         //     log.Println(err)
         //     return
-        // }
+		// }
+
+		payload := make(map[string]interface{})
         json.Unmarshal([]byte(p), &payload)
         message, messageTypeCheck := payload["message"].(map[string]interface{}); 
         if !messageTypeCheck {
             log.Println("message type incorrect!")
-        }
-        log.Println(message)
+		}
+		
+		log.Println(message)
+		
         switch payload["task"] {
             case "login":
-                log.Println("case login")
+				log.Println("case login")
+				response, _ := json.Marshal(api.HandleLogin(message))
+				conn.WriteMessage(messageType, response)
+
             case "getHomePage":
-                log.Println("case getHomePage")
+				log.Println("case getHomePage")
+				api.HandleGetHomePage(message)
+				
             case "getRamenShopDetail":
-                log.Println("case getRamenShopDetail")
+				log.Println("case getRamenShopDetail")
+				api.HandleGetRamenShopDetail(message)
                 
             default:
                 log.Println("default")
