@@ -1,4 +1,4 @@
-package message_api
+package github.com/J-HowHuang/Ramen-Live/backend/message_api
 
 import (
 	"log"
