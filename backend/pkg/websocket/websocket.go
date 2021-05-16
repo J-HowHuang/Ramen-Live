@@ -10,6 +10,14 @@ import (
 	"github.com/J-HowHuang/Ramen-Live/backend/pkg/api"
 )
 
+type apiFunc func(map[string]interface{}) map[string]interface{}
+
+var apiHandle = map[string]apiFunc{
+    "login":                api.HandleLogin,
+    "getHomePage":          api.HandleGetHomePage,
+    "getRamenShopDetail":   api.HandleGetRamenShopDetail,
+}
+
 var upgrader = websocket.Upgrader{
     ReadBufferSize:  1024,
     WriteBufferSize: 1024,
@@ -41,30 +49,20 @@ func Reader(conn *websocket.Conn) {
 
 		payload := make(map[string]interface{})
         json.Unmarshal([]byte(p), &payload)
-        message, messageTypeCheck := payload["message"].(map[string]interface{}); 
+
+        task, taskTypeCheck := payload["task"].(string)
+        if !taskTypeCheck {
+            log.Println("task type incorrect!")
+        }
+
+        message, messageTypeCheck := payload["message"].(map[string]interface{})
         if !messageTypeCheck {
             log.Println("message type incorrect!")
 		}
-		
-		log.Println(message)
-		
-        switch payload["task"] {
-            case "login":
-				log.Println("case login")
-				response, _ := json.Marshal(api.HandleLogin(message))
-				conn.WriteMessage(messageType, response)
-
-            case "getHomePage":
-				log.Println("case getHomePage")
-				api.HandleGetHomePage(message)
-				
-            case "getRamenShopDetail":
-				log.Println("case getRamenShopDetail")
-				api.HandleGetRamenShopDetail(message)
-                
-            default:
-                log.Println("default")
-        }
+        log.Println(message)
+        
+        response, _ := json.Marshal(apiHandle[task](message))
+        conn.WriteMessage(messageType, response)
     }
 }
 
