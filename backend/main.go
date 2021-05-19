@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/J-HowHuang/Ramen-Live/backend/pkg/db"
 	"github.com/J-HowHuang/Ramen-Live/backend/pkg/websocket"
-	_ "github.com/joho/godotenv/autoload"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -28,7 +28,7 @@ func setupRoutes() {
 	http.HandleFunc("/ws", serveWs)
 }
 
-func connectDB() {
+func main() {
 	db_url := os.Getenv("DB_URL")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -42,11 +42,9 @@ func connectDB() {
 	if err == nil {
 		log.Println("DB connected")
 	}
-}
 
-func main() {
+	db.InitDB(client)
 	setupRoutes()
-	connectDB()
 	http.ListenAndServe(":8088", nil)
 
 }

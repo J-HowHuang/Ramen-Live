@@ -1,19 +1,12 @@
 package db
 
 import (
-	"log"
-	"os"
 	_ "github.com/joho/godotenv/autoload"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func init() {
-	db_ip := os.Getenv("DB_IP")
-	log.Println(db_ip)
-}
+var db *mongo.Client
 
-func GetUserInformation(userid string) map[string]interface{} {
-	data := make(map[string]interface{})
-	data["username"] = "kaikai"
-	data["useravatar"] = "pekora"
-	return data;
+func InitDB(client *mongo.Client) {
+	db = client
 }
