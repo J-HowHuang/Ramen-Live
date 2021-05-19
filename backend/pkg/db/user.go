@@ -66,18 +66,16 @@ func LineLogin(accessToken string) map[string]interface{} {
 	}
 	res := getRequest("https://api.line.me/v2/profile",
 		map[string]string{},
-		map[string]string{"Bearer": accessToken})
-
+		map[string]string{"Authorization": "Bearer " + accessToken})
 	login_resp := Login(res["userId"].(string))
 	if login_resp["status"] == "not registered" {
 		user := make(map[string]interface{})
 		user["uid"] = res["userId"].(string)
 		user["lineName"] = res["displayName"].(string)
-		user["ineAvatarURL"] = res["pictureUrl"].(string)
+		user["lineAvatarURL"] = res["pictureUrl"].(string)
 
-		u, _ := json.Marshal(user)
 		ret["status"] = "not registered"
-		ret["user_info"] = string(u)
+		ret["user_info"] = user
 	} else {
 		ret["status"] = "logged in"
 		ret["user_info"] = login_resp["user_info"]
@@ -86,11 +84,11 @@ func LineLogin(accessToken string) map[string]interface{} {
 }
 
 func verifyAccessToken(accessToken string) bool {
-	res := getRequest("https://api.line.me/oauth2/v2.1/verify?access_token=",
+	res := getRequest("https://api.line.me/oauth2/v2.1/verify",
 		map[string]string{"access_token": accessToken},
 		map[string]string{})
 	channel_id := os.Getenv("CHANNEL_ID")
-	if res["client_id"].(string) == channel_id && res["expires_in"].(int) > 0 {
+	if res["client_id"].(string) == channel_id && res["expires_in"].(float64) > 0 {
 		return true
 	} else {
 		return false
