@@ -7,15 +7,29 @@ import (
 )
 
 /*
-User verification is done by Line API
+User verification is done by Line API.
 Frontend has to acquire access token from LINE SDK, then send it as an identifier of user.
 
 Login:
 
-frontend -> { type, uid, access_token }                             -> backend
+frontend	 	-> { type, uid, access_token }                             -> backend
 		- type: "line", "other"
 		- uid: provide the user id if the type is specified "other"
 		- access_token: provide the access token yield from LINE SDK if the type is specified "line"
+
+
+Backend cget user information from LINE Platform using the access token.
+
+backend  	  	-> { access_token }									-> LINE Platform 	(HTTP)
+Line Platform 	-> 200 OK { client_id, expires_in }					-> backend			(HTTP)
+
+
+Bankend then check if client_id == LINE Login channel ID && expires_in > 0
+If so, 
+
+backend		 	-> {  }
+
+
 
 backend  -> { status, user_info, homepageshoplist([]shopid) } -> frontend
 		- status: "not registered" or "logged in"
