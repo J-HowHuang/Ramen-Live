@@ -18,6 +18,8 @@ var apiHandle = map[string]apiFunc{
 	"register":           api.HandleRegister,
 	"getHomePage":        api.HandleGetHomePage,
 	"getRamenShopDetail": api.HandleGetRamenShopDetail,
+	"createShop":         api.HandleCreateShop,
+	"popShopInfo":        api.HandlePopShopInfo,
 }
 
 var upgrader = websocket.Upgrader{
