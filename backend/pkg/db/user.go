@@ -74,7 +74,9 @@ func LineLogin(accessToken string) map[string]interface{} {
 		user["lineName"] = res["displayName"].(string)
 		user["lineAvatarURL"] = res["pictureUrl"].(string)
 
-		ret["status"] = "not registered"
+		Register(user)
+
+		ret["status"] = "new user"
 		ret["user_info"] = user
 	} else {
 		ret["status"] = "logged in"

@@ -25,14 +25,14 @@ Line Platform 	-> 200 OK { client_id, expires_in }					-> backend			(HTTP)
 
 
 Bankend then check if client_id == LINE Login channel ID && expires_in > 0
-If so, 
+If so,
 
 backend		 	-> {  }
 
 
 
 backend  -> { status, user_info, homepageshoplist([]shopid) } -> frontend
-		- status: "not registered" or "logged in"
+		- status: "new user" or "logged in"
 		- user_info: {
 			Uid            string   // LINE 的 uid
 			LineName       string   // LINE 的顯示名稱
@@ -48,9 +48,6 @@ backend  -> { status, user_info, homepageshoplist([]shopid) } -> frontend
 func HandleLogin(message map[string]interface{}) map[string]interface{} {
 	// userinformation:= make(map[string]interface{})
 
-	// some db queries
-
-	// type assertion
 	resp := make(map[string]interface{})
 	if message["type"] == "line" {
 		resp = db.LineLogin((message["access_token"].(string)))
@@ -58,17 +55,13 @@ func HandleLogin(message map[string]interface{}) map[string]interface{} {
 		resp = db.Login(message["uid"].(string))
 	}
 
-	if resp["status"] == "not registered" {
-		fmt.Println("not registered!")
+	if resp["status"] == "new user" {
+		fmt.Println("new user!")
 		fmt.Print(resp["user_info"])
 	} else if resp["status"] == "logged in" {
 		fmt.Println("logged in!")
 		fmt.Print(resp["user_info"])
 	}
-
-	resp["homepageshoplist"] = [...]string{"ggg", "pongstar", "ggb"}
-
-	// TODO: OOP Design
 
 	return resp
 }
