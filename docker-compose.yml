@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  db:
+    image: mongo:4.2
+    ports: 
+      - 27018:27017
+    volumes:
+      - ./db/data:/data/db
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  backend:
+    build: 
+      context: ./backend
+    ports: 
+      - 8088:8088
+
