@@ -18,7 +18,7 @@ func Register(newUser map[string]interface{}) map[string]interface{} {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	if users.FindOne(ctx, bson.D{{"uid", newUser["uid"]}}).Err() != mongo.ErrNoDocuments {
+	if users.FindOne(ctx, bson.D{{"_id", newUser["_id"]}}).Err() != mongo.ErrNoDocuments {
 		// handle registered user
 	}
 
@@ -42,7 +42,7 @@ func Login(userId string) map[string]interface{} {
 	ret := make(map[string]interface{})
 
 	// log the login info
-	finding := users.FindOne(ctx, bson.D{{"uid", userId}})
+	finding := users.FindOne(ctx, bson.D{{"_id", userId}})
 	if finding.Err() == mongo.ErrNoDocuments {
 		ret["status"] = "not registered"
 		user := make(map[string]interface{})
@@ -70,9 +70,9 @@ func LineLogin(accessToken string) map[string]interface{} {
 	login_resp := Login(res["userId"].(string))
 	if login_resp["status"] == "not registered" {
 		user := make(map[string]interface{})
-		user["uid"] = res["userId"].(string)
+		user["_id"] = res["userId"].(string)
 		user["lineName"] = res["displayName"].(string)
-		user["lineAvatarURL"] = res["pictureUrl"].(string)
+		user["linePictureURL"] = res["pictureUrl"].(string)
 
 		Register(user)
 
