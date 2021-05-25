@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/J-HowHuang/Ramen-Live/backend/pkg/db"
 )
 
@@ -46,21 +44,15 @@ backend  -> { status, user_info, homepageshoplist([]shopid) } -> frontend
 */
 
 func HandleLogin(message map[string]interface{}) map[string]interface{} {
-	// userinformation:= make(map[string]interface{})
-
 	resp := make(map[string]interface{})
+
 	if message["type"] == "line" {
 		resp = db.LineLogin((message["access_token"].(string)))
-	} else {
+	} else if message["type"] == "uid" {
 		resp = db.Login(message["uid"].(string))
-	}
-
-	if resp["status"] == "new user" {
-		fmt.Println("new user!")
-		fmt.Print(resp["user_info"])
-	} else if resp["status"] == "logged in" {
-		fmt.Println("logged in!")
-		fmt.Print(resp["user_info"])
+	} else {
+		resp["status"] = "error"
+		resp["message"] = "unknown login type"
 	}
 
 	return resp

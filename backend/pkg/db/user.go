@@ -62,11 +62,18 @@ func Login(userId string) map[string]interface{} {
 func LineLogin(accessToken string) map[string]interface{} {
 	ret := make(map[string]interface{})
 	if !verifyAccessToken(accessToken) {
-		// handle invalid access token
+		ret["status"] = "error"
+		ret["message"] = "invalid access token"
+		return ret
 	}
-	res := getRequest("https://api.line.me/v2/profile",
+	res, err := getRequest("https://api.line.me/v2/profile",
 		map[string]string{},
 		map[string]string{"Authorization": "Bearer " + accessToken})
+	if err != nil {
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
+	}
 	login_resp := Login(res["userId"].(string))
 	if login_resp["status"] == "not registered" {
 		user := make(map[string]interface{})
@@ -86,9 +93,12 @@ func LineLogin(accessToken string) map[string]interface{} {
 }
 
 func verifyAccessToken(accessToken string) bool {
-	res := getRequest("https://api.line.me/oauth2/v2.1/verify",
+	res, err := getRequest("https://api.line.me/oauth2/v2.1/verify",
 		map[string]string{"access_token": accessToken},
 		map[string]string{})
+	if err != nil {
+		return false
+	}
 	channel_id := os.Getenv("CHANNEL_ID")
 	if res["client_id"].(string) == channel_id && res["expires_in"].(float64) > 0 {
 		return true
@@ -99,11 +109,11 @@ func verifyAccessToken(accessToken string) bool {
 
 func getRequest(url string,
 	queries map[string]string,
-	headers map[string]string) map[string]interface{} {
+	headers map[string]string) (map[string]interface{}, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Print(err)
-		os.Exit(1)
+		return nil, err
 	}
 
 	q := req.URL.Query()
@@ -118,15 +128,17 @@ func getRequest(url string,
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		//handle error
+		log.Print(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		// handle error
+		log.Print(err)
+		return nil, err
 	}
 	var res map[string]interface{}
 	json.Unmarshal(body, &res)
 
-	return res
+	return res, nil
 }
