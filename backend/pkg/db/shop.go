@@ -14,13 +14,16 @@ func CreateShop(newShop map[string]interface{}) map[string]interface{} {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	ret := make(map[string]interface{})
+
 	_, err := shops.InsertOne(ctx, newShop)
 	if err != nil {
-		// handle errors
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+	} else {
+		ret["status"] = "success"
+		ret["shop_info"] = newShop
 	}
-	ret := make(map[string]interface{})
-	ret["status"] = "success"
-	ret["shop_info"] = newShop
 
 	return ret
 }
@@ -49,16 +52,19 @@ func RemoveShop(shopId string) map[string]interface{} {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	ret := make(map[string]interface{})
 	res, err := shops.DeleteOne(ctx, bson.D{{"_id", shopId}})
 	if err != nil {
-		// handle deletion error
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
 	}
 	if res.DeletedCount == 0 {
-		// handle no finding of shop
+		ret["status"] = "nothing removed"
+		return ret
+	} else {
+		ret["status"] = "success"
+		return ret
 	}
 
-	ret := make(map[string]interface{})
-	ret["status"] = "success"
-
-	return ret
 }
