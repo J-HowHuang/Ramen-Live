@@ -8,27 +8,46 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func validShop(shop map[string]interface{}) bool {
+	required := []string{
+		"name",
+		"position_x",
+		"position_y",
+		"region",
+	}
+	for _, f := range required {
+		if _, ok := shop[f]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
 func CreateShop(newShop map[string]interface{}) map[string]interface{} {
+	ret := make(map[string]interface{})
 	shops := db.Database("RamenDB").Collection("shops")
+	if !validShop(newShop) {
+		ret["status"] = "error"
+		ret["message"] = "Missing data in required field"
+		return ret
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	ret := make(map[string]interface{})
-
-	_, err := shops.InsertOne(ctx, newShop)
+	res, err := shops.InsertOne(ctx, newShop)
 	if err != nil {
 		ret["status"] = "error"
 		ret["message"] = err.Error()
 	} else {
 		ret["status"] = "success"
-		ret["shop_info"] = newShop
+		ret["shop_id"] = res.InsertedID
 	}
 
 	return ret
 }
 
-func GetShop(shopId string) map[string]interface{} {
+func GetShop(shopId string, brief bool) map[string]interface{} {
 	shops := db.Database("RamenDB").Collection("shops")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
