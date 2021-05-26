@@ -14,12 +14,14 @@ import (
 type apiFunc func(map[string]interface{}) map[string]interface{}
 
 var apiHandle = map[string]apiFunc{
-	"login":              api.HandleLogin,
-	"register":           api.HandleRegister,
-	"getHomePage":        api.HandleGetHomePage,
-	"getRamenShopDetail": api.HandleGetRamenShopDetail,
-	"createShop":         api.HandleCreateShop,
-	"popShopInfo":        api.HandlePopShopInfo,
+	"login":         api.HandleLogin,
+	"register":      api.HandleRegister,
+	"getHomePage":   api.HandleGetHomePage,
+	"createShop":    api.HandleCreateShop,
+	"post":          api.HandlePost,
+	"getShopBrief":  api.HandleGetShopsBrief,
+	"getShopDetail": api.HandleGetShopDetail,
+	"getPosts":      api.HandleGetPosts,
 }
 
 var upgrader = websocket.Upgrader{
