@@ -85,6 +85,34 @@ func GetShop(shopId string, brief bool) map[string]interface{} {
 	return ret
 }
 
+func GetShopsInRegions(regions []int) map[string]interface{} {
+	shops := db.Database("RamenDB").Collection("shops")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	ret := make(map[string]interface{})
+	cursor, err := shops.Find(ctx, bson.D{{
+		"region", bson.D{
+			{"$in", regions},
+		},
+	}})
+	if err != nil {
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
+	}
+
+	var results []bson.M
+	if err := cursor.All(context.TODO(), &results); err != nil {
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
+	}
+	ret["status"] = "success"
+	ret["shops_id"] = results
+	return ret
+}
+
 func RemoveShop(shopId string) map[string]interface{} {
 	shops := db.Database("RamenDB").Collection("shops")
 
