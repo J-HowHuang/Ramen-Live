@@ -40,7 +40,12 @@ func main() {
 		}
 	}()
 	if err == nil {
-		log.Println("DB connected")
+		err := client.Ping(ctx, nil)
+		if err == nil {
+			log.Println("DB connected at " + db_url)
+		} else {
+			log.Println("Failed to connect DB at " + db_url)
+		}
 	}
 
 	db.InitDB(client)
