@@ -8,7 +8,9 @@ func HandleGetShopsBrief(message map[string]interface{}) map[string]interface{} 
 	var shopInfos []map[string]interface{}
 	for _, id := range shops {
 		shop := db.GetShop(id.(string), true)
-		shopInfos = append(shopInfos, shop["shop_info"].(map[string]interface{}))
+		if shop["status"] != "error" {
+			shopInfos = append(shopInfos, shop["shop_info"].(map[string]interface{}))
+		}
 	}
 	ret["status"] = "success"
 	ret["shop_info"] = shopInfos
