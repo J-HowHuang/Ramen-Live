@@ -4,7 +4,7 @@ services:
   db:
     image: mongo:4.2
     ports: 
-      - 27017:27017
+      - 27027:27017
     volumes:
       - ./db/data:/data/db
     environment: 
