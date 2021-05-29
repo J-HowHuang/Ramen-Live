@@ -68,8 +68,10 @@ func Reader(conn *websocket.Conn) {
 		}
 		log.Println(message)
 
-		response := apiHandle[task](message)
+		response := make(map[string]interface{})
+		response_content := apiHandle[task](message)
 		response["task"] = payload["task"]
+		response["content"] = response_content
 		response_json, _ := json.Marshal(response)
 		conn.WriteMessage(messageType, response_json)
 	}
