@@ -69,9 +69,17 @@ func Reader(conn *websocket.Conn) {
 		log.Println(message)
 
 		response := make(map[string]interface{})
-		response_content := apiHandle[task](message)
-		response["task"] = payload["task"]
-		response["content"] = response_content
+		if _, ok := apiHandle[task]; ok {
+			response_content := apiHandle[task](message)
+			response["task"] = payload["task"]
+			response["content"] = response_content
+		} else {
+			response["task"] = payload["task"]
+			content := make(map[string]interface{})
+			content["status"] = "error"
+			content["message"] = "no such task"
+			response["content"] = content
+		}
 		response_json, _ := json.Marshal(response)
 		conn.WriteMessage(messageType, response_json)
 	}
