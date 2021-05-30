@@ -47,9 +47,17 @@ func HandleLogin(message map[string]interface{}) map[string]interface{} {
 	resp := make(map[string]interface{})
 
 	if message["type"] == "line" {
-		resp = db.LineLogin((message["access_token"].(string)))
+		if accessToken, ok := message["access_token"].(string); ok {
+			resp = db.LineLogin(accessToken)
+		} else {
+			resp = formatError()
+		}
 	} else if message["type"] == "uid" {
-		resp = db.Login(message["uid"].(string))
+		if uid, ok := message["uid"].(string); ok {
+			resp = db.Login(uid)
+		} else {
+			resp = formatError()
+		}
 	} else {
 		resp["status"] = "error"
 		resp["message"] = "unknown login type"
