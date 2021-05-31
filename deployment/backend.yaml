@@ -16,7 +16,7 @@ spec:
             - containerPort: 8088
           env:
             - name: DB_URL
-              value: mongodb://root:root@mongo-svc:27017
+              value: mongodb://mongo-svc:27017
             - name: CHANNEL_ID
               value: "1655942956"
   selector:
