@@ -113,6 +113,39 @@ func GetShopsInRegions(regions []int) map[string]interface{} {
 	return ret
 }
 
+func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[string]interface{} {
+    left, right := lat - hor, lat + hor
+    up, down := lon + ver, lon - ver
+    shops := db.Database("RamenDB").Collection("shops")
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+
+    ret := make(map[string]interface{})
+    cursor, err := shops.Find(ctx, bson.D{{
+        "$and", []bson.D {
+            bson.D{{ "location_x", bson.D{{ "$gt", left     }}  }},
+            bson.D{{ "location_x", bson.D{{ "$lt", right    }}  }},
+            bson.D{{ "location_y", bson.D{{ "$gt", down     }}  }},
+            bson.D{{ "location_y", bson.D{{ "$lt", up       }}  }},
+        },
+    }})
+    if err != nil {
+        ret["status"] = "error"
+        ret["message"] = err.Error()
+        return ret
+    }
+
+    var results []bson.M
+    if err := cursor.All(context.TODO(), &results); err != nil {
+        ret["status"] = "error"
+        ret["message"] = err.Error()
+        return ret
+    }
+    ret["status"] = "success"
+    ret["nearby_shops"] = results
+    return ret
+}
+
 func RemoveShop(shopId string) map[string]interface{} {
 	shops := db.Database("RamenDB").Collection("shops")
 
