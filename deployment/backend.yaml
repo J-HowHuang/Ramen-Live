@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-server
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: backend-server
+    spec:
+      containers:
+        - name: backend-server
+          image: gcr.io/ramen-live/backend-server:v1
+          ports:
+            - containerPort: 8088
+          env:
+            - name: DB_URL
+              value: mongodb://root:root@mongo-svc:27017
+            - name: CHANNEL_ID
+              value: "1655942956"
+  selector:
+    matchLabels:
+      app: backend-server
