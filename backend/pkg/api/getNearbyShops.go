@@ -6,10 +6,6 @@ import (
     "github.com/J-HowHuang/Ramen-Live/backend/pkg/db"
 )
 
-type Shop struct {
-
-}
-
 type ByDistance []map[string]interface{}
 func (a ByDistance) Len() int           { return len(a) }
 func (a ByDistance) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
