@@ -142,7 +142,14 @@ func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[st
         return ret
     }
     ret["status"] = "success"
-    ret["nearby_shops"] = results
+	var shop map[string]interface{}
+    var shops_decode []map[string]interface{}
+	for _, shop_object := range results {
+		bsonBytes, _ := bson.Marshal(shop_object)
+		bson.Unmarshal(bsonBytes, shop)
+        shops_decode = append(shops_decode, shop)
+    }
+    ret["nearby_shops"] = shops_decode
     return ret
 }
 
