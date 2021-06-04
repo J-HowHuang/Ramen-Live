@@ -22,6 +22,7 @@ var apiHandle = map[string]apiFunc{
 	"getShopDetail":     api.HandleGetShopDetail,
 	"getPosts":          api.HandleGetPosts,
 	"getShopsInRegions": api.HandleGetShopsInRegions,
+	"getNearbyShops":	 api.HandleGetNearbyShops,
 	"removeShop":        api.HandleRemoveShop,
 }
 
