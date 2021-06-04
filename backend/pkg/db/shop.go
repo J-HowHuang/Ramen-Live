@@ -151,7 +151,7 @@ func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[st
 		bson.Unmarshal(bsonBytes, shop)
         shops_decode = append(shops_decode, shop)
     }
-    ret["nearby_shops"] = shops_decode
+    ret["shops_id"] = shops_decode
     return ret
 }
 

@@ -16,13 +16,13 @@ func HandleGetNearbyShops(message map[string]interface{}) map[string]interface{}
     lat := location["lat"].(float64)
     lon := location["lon"].(float64)
     query := db.GetShopsInRange(lat, lon, 0.002, 0.002)
-    nearby_shops := query["nearby_shops"]
+    nearby_shops := query["shops_id"]
 
     for _, shop := range nearby_shops.([]map[string]interface{}) {
         shop["distance"] = distance(lat, lon, shop["position_x"].(float64), shop["position_y"].(float64))
     }
     sort.Sort(ByDistance(nearby_shops.([]map[string]interface{})))
-    query["nearby_shops"] = nearby_shops
+    query["shops_id"] = nearby_shops
     return query
 }
 
