@@ -5,10 +5,17 @@ import (
 )
 
 func HandleGetShopsInRegions(message map[string]interface{}) map[string]interface{} {
-	regions := message["regions"].([]interface{})
-	regions_int := make([]int, len(regions))
-	for i, r := range regions {
-		regions_int[i] = int(r.(float64))
+	if regions, ok := message["regions"].([]interface{}); ok {
+		regions_int := make([]int, len(regions))
+		for i, r := range regions {
+			if _, ok := r.(float64); ok {
+				regions_int[i] = int(r.(float64))
+			} else {
+				continue
+			}
+		}
+		return db.GetShopsInRegions(regions_int)
+	} else {
+		return formatError()
 	}
-	return db.GetShopsInRegions(regions_int)
 }

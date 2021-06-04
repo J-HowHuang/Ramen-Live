@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func validPost(post map[string]interface{}) bool {
@@ -51,7 +52,13 @@ func GetPost(postId interface{}) map[string]interface{} {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	res := posts.FindOne(ctx, bson.D{{"_id", postId}})
+	var objID primitive.ObjectID
+	if _, ok := postId.(string); ok {
+		objID, _ = primitive.ObjectIDFromHex(postId.(string))
+	} else if _, ok := postId.(primitive.ObjectID); ok {
+		objID = postId.(primitive.ObjectID)
+	}
+	res := posts.FindOne(ctx, bson.D{{"_id", objID}})
 	if res.Err() != nil {
 		ret["status"] = "error"
 		ret["message"] = res.Err().Error()
