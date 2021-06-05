@@ -3,6 +3,8 @@ package db
 import (
 	"context"
 	"time"
+	"fmt"
+	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -122,13 +124,13 @@ func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[st
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
     defer cancel()
 
-    ret := make(map[string]interface{})
+	ret := make(map[string]interface{})
     cursor, err := shops.Find(ctx, bson.D{{
         "$and", []bson.D {
-            bson.D{{ "location_x", bson.D{{ "$gt", left     }}  }},
-            bson.D{{ "location_x", bson.D{{ "$lt", right    }}  }},
-            bson.D{{ "location_y", bson.D{{ "$gt", down     }}  }},
-            bson.D{{ "location_y", bson.D{{ "$lt", up       }}  }},
+            bson.D{{ "position_x", bson.D{{ "$gt", left     }}  }},
+            bson.D{{ "position_x", bson.D{{ "$lt", right    }}  }},
+            bson.D{{ "position_y", bson.D{{ "$gt", down     }}  }},
+            bson.D{{ "position_y", bson.D{{ "$lt", up       }}  }},
         },
     }})
     if err != nil {
@@ -144,14 +146,9 @@ func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[st
         return ret
     }
     ret["status"] = "success"
-	var shop map[string]interface{}
-    var shops_decode []map[string]interface{}
-	for _, shop_object := range results {
-		bsonBytes, _ := bson.Marshal(shop_object)
-		bson.Unmarshal(bsonBytes, shop)
-        shops_decode = append(shops_decode, shop)
-    }
-    ret["shops_id"] = shops_decode
+    ret["shops_id"] = results
+	log.Println("results: ", ret["shops_id"])
+	fmt.Println("results: ", ret["shops_id"])
     return ret
 }
 

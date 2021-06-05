@@ -1,12 +1,13 @@
 package api
 
 import (
-    // "log"
+    "log"
     "sort"
     "github.com/J-HowHuang/Ramen-Live/backend/pkg/db"
+    "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ByDistance []map[string]interface{}
+type ByDistance []primitive.M
 func (a ByDistance) Len() int           { return len(a) }
 func (a ByDistance) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDistance) Less(i, j int) bool { return a[i]["distance"].(float64) < a[j]["distance"].(float64) }
@@ -18,11 +19,12 @@ func HandleGetNearbyShops(message map[string]interface{}) map[string]interface{}
     query := db.GetShopsInRange(lat, lon, 0.002, 0.002)
     nearby_shops := query["shops_id"]
 
-    for _, shop := range nearby_shops.([]map[string]interface{}) {
+    for _, shop := range nearby_shops.([]primitive.M) {
         shop["distance"] = distance(lat, lon, shop["position_x"].(float64), shop["position_y"].(float64))
     }
-    sort.Sort(ByDistance(nearby_shops.([]map[string]interface{})))
+    sort.Sort(ByDistance(nearby_shops.([]primitive.M)))
     query["shops_id"] = nearby_shops
+    log.Printf("shops_id: ", nearby_shops)
     return query
 }
 
