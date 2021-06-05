@@ -74,12 +74,19 @@ func LineLogin(accessToken string) map[string]interface{} {
 		ret["message"] = err.Error()
 		return ret
 	}
-	login_resp := Login(res["userId"].(string))
+	var login_resp map[string]interface{}
+	if id, ok := res["userId"].(string); ok {
+		login_resp = Login(id)
+	} else {
+		ret["status"] = "error"
+		ret["message"] = "empty LINE userId"
+		return ret
+	}
 	if login_resp["status"] == "not registered" {
 		user := make(map[string]interface{})
-		user["_id"] = res["userId"].(string)
-		user["lineName"] = res["displayName"].(string)
-		user["linePictureURL"] = res["pictureUrl"].(string)
+		user["_id"] = res["userId"]
+		user["lineName"] = res["displayName"]
+		user["linePictureURL"] = res["pictureUrl"]
 
 		Register(user)
 
@@ -97,6 +104,8 @@ func verifyAccessToken(accessToken string) bool {
 		map[string]string{"access_token": accessToken},
 		map[string]string{})
 	if err != nil {
+		return false
+	} else if res["error"] != nil {
 		return false
 	}
 	channel_id := os.Getenv("CHANNEL_ID")
