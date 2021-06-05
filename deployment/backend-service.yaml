@@ -10,3 +10,4 @@ spec:
     - protocol: TCP
       targetPort: 8088
       port: 80
+  loadBalancerIP: "35.194.206.199"
