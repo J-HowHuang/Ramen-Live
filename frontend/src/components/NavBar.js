@@ -1,11 +1,15 @@
 import AppBar from '@material-ui/core/AppBar'
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Toolbar, Typography, Link } from '@material-ui/core';
+import { Button, Toolbar, Typography, Link, Slide, useScrollTrigger, CardMedia } from '@material-ui/core';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-
+import { Image } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
+    media: {
+        height: 10,
+        paddingTop: '56.25%', // 16:9
+    },
     homepagebutton:{
       marginRight: theme.spacing(3),
     },
@@ -39,15 +43,19 @@ export default function NavBar(props){
                 <Typography variant="h4" className={classes.title}>
                     {props.context}
                 </Typography>
-                <Link component={RouterLink} to={"/"} color="inherit" variant="body2" underline='none' className={classes.homepagebutton}>
+                {/* <Link component={RouterLink} to={"/"} color="inherit" variant="body2" underline='none' className={classes.homepagebutton}>
                     <Button color="inherit" onClick={() => dispatch({type: "home"})}>
                         <Typography variant="h6">home</Typography>
                     </Button>
-                </Link>
+                </Link> */}
                 {user.isLogin?
                     <Button color="inherit">
+                        <CardMedia
+                            className={classes.media}
+                            image={user.userPictureURL}
+                        />
                         <Typography variant="h6" className={classes.title}>
-                            {user.userId}
+                            {user.userName}
                         </Typography>
                     </Button>
                     :

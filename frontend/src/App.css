@@ -51,6 +51,7 @@
 
 .shoplist {
   padding: 0 2vw 0 2vw;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   height: 70vh;
 }
