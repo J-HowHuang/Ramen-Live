@@ -1,4 +1,4 @@
 db/*
 backend/.env
-backend/TLS/*
-frontend/*
+frontend/node_modules
+frontend/build
