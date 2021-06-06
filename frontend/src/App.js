@@ -37,7 +37,7 @@ function App() {
 
   useState(()=>{
     if(connection.isConnected === false){
-      const client = new WebSocket('ws://35.194.206.199/ws')
+      const client = new WebSocket('wss://api.ramen-live.com/ws')
       client.addEventListener("open", ()=>{
         console.log("connected to server!")
         dispatch({type: 'connected', payload: { socket: client }})
