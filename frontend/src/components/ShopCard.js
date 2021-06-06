@@ -2,6 +2,8 @@ import { Link, Typography, Card, CardMedia, CardContent, CardHeader, Grid, IconB
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { shallowEqual, useSelector } from "react-redux";
 import { Link as RouterLink } from 'react-router-dom';
+import{ format } from 'date-fns'
+
 
 const useStyles = makeStyles(theme => ({
     media: {
@@ -24,7 +26,7 @@ export default function ShopCard(props){
                         //     </IconButton>
                         // }
                         title={props.name}
-                        subheader={props.recent_post?`上一筆回報：${props.recent_post.report}`:"沒有回報資料"}
+                        subheader={props.recent_post?`上一筆回報：${props.recent_post.report}, ${format(new Date(props.recent_post.postTime), 'MM/dd HH:mm')}`:"沒有回報資料"}
                     />
                     <CardMedia
                         className={classes.media}
