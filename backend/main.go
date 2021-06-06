@@ -50,6 +50,5 @@ func main() {
 
 	db.InitDB(client)
 	setupRoutes()
-	go http.ListenAndServe(":8088", nil)
-	http.ListenAndServeTLS(":8089", "cert.pem", "key.pem", nil)
+	http.ListenAndServeTLS(":8089", "/etc/tls/cert.pem", "/etc/tls/key.pem", nil)
 }

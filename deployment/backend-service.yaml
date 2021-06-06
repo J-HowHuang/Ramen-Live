@@ -8,6 +8,6 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      targetPort: 8088
-      port: 80
+      targetPort: 8089
+      port: 443
   loadBalancerIP: "35.194.206.199"

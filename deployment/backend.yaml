@@ -11,14 +11,22 @@ spec:
     spec:
       containers:
         - name: backend-server
-          image: gcr.io/ramen-live/backend-server:v1.1.2
+          image: gcr.io/ramen-live/backend-server:v1.1.3tls
           ports:
-            - containerPort: 8088
+            - containerPort: 8089
+          volumeMounts:
+            - name: server-tls
+              mountPath: /etc/tls
+              readOnly: true
           env:
             - name: DB_URL
               value: mongodb://mongo-svc:27017
             - name: CHANNEL_ID
               value: "1656068485"
+      volumes:
+        - name: server-tls
+          secret:
+            secretName: tls-certificate
   selector:
     matchLabels:
       app: backend-server
