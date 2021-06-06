@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: backend-server
-          image: gcr.io/ramen-live/backend-server:v1.1.1loc
+          image: gcr.io/ramen-live/backend-server:v1.1.2
           ports:
             - containerPort: 8088
           env:
