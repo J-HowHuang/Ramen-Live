@@ -23,8 +23,12 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	// go websocket.Writer(ws)
 	websocket.Reader(ws)
 }
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Health!")
+}
 
 func setupRoutes() {
+	http.HandleFunc("/", healthCheck)
 	http.HandleFunc("/ws", serveWs)
 }
 
@@ -50,5 +54,5 @@ func main() {
 
 	db.InitDB(client)
 	setupRoutes()
-	http.ListenAndServeTLS(":8089", "/etc/tls/cert.pem", "/etc/tls/key.pem", nil)
+	http.ListenAndServeTLS(":8089", "/etc/tls/tls.crt", "/etc/tls/tls.key", nil)
 }
