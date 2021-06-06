@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-server
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend-server
+    spec:
+      containers:
+        - name: frontend-server
+          image: gcr.io/ramen-live/frontend-server:v1.0.1tls
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - name: server-tls
+              mountPath: /etc/nginx/ssl
+              readOnly: true
+      volumes:
+        - name: server-tls
+          secret:
+            secretName: tls-cert-front
+  selector:
+    matchLabels:
+      app: frontend-server

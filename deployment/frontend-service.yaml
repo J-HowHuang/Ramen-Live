@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+spec:
+  selector:
+    app: frontend-server
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      targetPort: 443
+      port: 443
+  loadBalancerIP: "35.221.195.37"
