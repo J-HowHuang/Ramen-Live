@@ -1,7 +1,18 @@
 package loc
 
-func GetCityList(map[string]interface{}) []int {
+import (
+    // "log"
+)
 
-	return []int{3, 1, 9, 14, 2, 5, 11, 0, 4, 7, 8, 12, 10, 6, 13}
+type region struct {
+    zipcode int
+    lat     float64
+    lon     float64
+}
 
+func NearbyRegions(lat float64, lon float64) []int {
+    // for i, r := range allRegions {
+    //     log.Println(i, r)
+    // }
+    return []int{-1}
 }
