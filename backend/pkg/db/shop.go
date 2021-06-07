@@ -75,12 +75,14 @@ func GetShop(shopId string, brief bool) map[string]interface{} {
 		briefInfo["profile_picture"] = shopInfo["profile_picture"]
 		if posts, ok := shopInfo["posts"]; ok {
 			postPA := posts.(primitive.A)
-			recentPost := []interface{}(postPA)[0]
-			postRes := GetPost(recentPost.(primitive.ObjectID))
-			if postRes["status"] == "error" {
-				briefInfo["recent_post"] = "cannot retreive the post"
-			} else {
-				briefInfo["recent_post"] = postRes["post_info"]
+			if len(postPA) > 0 {
+				recentPost := []interface{}(postPA)[0]
+				postRes := GetPost(recentPost.(primitive.ObjectID))
+				if postRes["status"] == "error" {
+					briefInfo["recent_post"] = "cannot retreive the post"
+				} else {
+					briefInfo["recent_post"] = postRes["post_info"]
+				}
 			}
 		}
 		ret["shop_info"] = briefInfo
