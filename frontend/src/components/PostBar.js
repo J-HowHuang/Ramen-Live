@@ -28,6 +28,7 @@ export default function SearchBar(props){
 
     const classes = useStyles()
     const connection = useSelector(state=>state.connection, shallowEqual)
+    const user = useSelector(state=>state.user, shallowEqual)
     const state = useSelector(state=>state, shallowEqual)
     const [unit, setunit] = useState("person")
     const [amount, setamount] = useState("")
@@ -50,6 +51,7 @@ export default function SearchBar(props){
             // console.log(`${amount} ${unit}, ${description}`)
             let report = ` ${amount} ${unit==="person"?"人":unit==="group"?"組":unit==="hour"?"小時":"分鐘"}`
             let post_info = {
+                name: user.isLogin?user.userName:"匿名",
                 shop_id: props.id,
                 report,
                 description,

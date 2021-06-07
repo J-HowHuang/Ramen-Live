@@ -41,8 +41,8 @@ function removeShop(socket, id){
 function createShop(socket, id, name, region){
     let shopInfo = {
         name,
-        position_x: 24.973037299999998,
-        position_y: 121.5471915,
+        position_x: 121.540071,
+        position_y: 24.952636, 
         region: parseInt(region),
         // profile_picture,
         // pictures,
@@ -77,7 +77,7 @@ function post(socket, post_info){
     let message = {
         shop_id: post_info.shop_id,
         new_post: {
-            author: "oscar",
+            author: post_info.name,
             postTime: post_info.time,
             description: post_info.description,
             report: post_info.report,

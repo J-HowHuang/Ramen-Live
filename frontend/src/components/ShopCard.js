@@ -30,7 +30,7 @@ export default function ShopCard(props){
                     />
                     <CardMedia
                         className={classes.media}
-                        image={props.profile_picture?props.profile_picture:"https://tw.savorjapan.com/gg/content_image/t0039_002_20180115022046.jpg"}
+                        image={props.pictureURL?props.pictureURL:"https://tw.savorjapan.com/gg/content_image/t0039_002_20180115022046.jpg"}
                         title="Paella dish"
                     />
                     {/* <CardContent>

@@ -1,6 +1,6 @@
 import AppBar from '@material-ui/core/AppBar'
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Toolbar, Typography, Link, Slide, useScrollTrigger, CardMedia } from '@material-ui/core';
+import { Button, Toolbar, Typography, Link, Slide, useScrollTrigger, CardMedia, Grid } from '@material-ui/core';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
@@ -50,11 +50,7 @@ export default function NavBar(props){
                 </Link> */}
                 {user.isLogin?
                     <Button color="inherit">
-                        <CardMedia
-                            className={classes.media}
-                            image={user.userPictureURL}
-                        />
-                        <Typography variant="h6" className={classes.title}>
+                        <Typography variant="h6">
                             {user.userName}
                         </Typography>
                     </Button>

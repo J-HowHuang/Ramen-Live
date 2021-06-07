@@ -30,8 +30,8 @@ function MainPage(props){
     const [ID, setID] = useState("")
 
     useState(()=>{
-        // getShopsInRegion(connection.socket, [1])
-        getLocation(dispatch)
+        getShopsInRegion(connection.socket, [1])
+        // getLocation(dispatch)
     })
 
     let code = getParameterByName('code')

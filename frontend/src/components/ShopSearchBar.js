@@ -45,7 +45,8 @@ export default function SearchBar(){
 
     const searchTypeChanged = (e) => {
         if(e.target.value === "nearby"){
-            user.havePosition?SETSEARCHTYPE("nearby"):SETSEARCHTYPE("region")
+            setSearchType("nearby")
+            // user.havePosition?SETSEARCHTYPE("nearby"):SETSEARCHTYPE("region")
         }
         else
             setSearchType("region")
@@ -67,7 +68,7 @@ export default function SearchBar(){
                 <Grid item sm={sizes.sm[0]} md={sizes.md[0]}>
                     <Grid container justify="center" alignItems="center">
                         <Grid item>
-                            <RadioGroup row value={user.havePosition?searchType:"region"} onChange={searchTypeChanged}>
+                            <RadioGroup row value={searchType} onChange={searchTypeChanged}>
                                 <FormControlLabel value="nearby" control={<Radio/>} label="搜尋附近" onChange={(e)=>{ getLocation(dispatch) }} />
                                 <FormControlLabel value="region" control={<Radio/>} label="搜尋區域"/>
                             </RadioGroup>

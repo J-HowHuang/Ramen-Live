@@ -26,8 +26,8 @@ const initialState = {
     currentShop:{
         id:"",
         name:"",
-        position_x: 123.12,
-        positioin_y: 23.12,
+        position_x: 0,
+        positioin_y: 0,
         region: 0,
         posts_id: []
     },
