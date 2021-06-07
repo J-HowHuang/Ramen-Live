@@ -2,9 +2,9 @@ package db
 
 import (
 	"context"
-	"time"
 	"fmt"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -117,39 +117,39 @@ func GetShopsInRegions(regions []int) map[string]interface{} {
 	return ret
 }
 
-func GetShopsInRange(lat float64, lon float64, hor float64, ver float64)  map[string]interface{} {
-    left, right := lat - hor, lat + hor
-    up, down := lon + ver, lon - ver
-    shops := db.Database("RamenDB").Collection("shops")
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
+func GetShopsInRange(lat float64, lon float64, hor float64, ver float64) map[string]interface{} {
+	left, right := lat-hor, lat+hor
+	up, down := lon+ver, lon-ver
+	shops := db.Database("RamenDB").Collection("shops")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
 	ret := make(map[string]interface{})
-    cursor, err := shops.Find(ctx, bson.D{{
-        "$and", []bson.D {
-            bson.D{{ "position_x", bson.D{{ "$gt", left     }}  }},
-            bson.D{{ "position_x", bson.D{{ "$lt", right    }}  }},
-            bson.D{{ "position_y", bson.D{{ "$gt", down     }}  }},
-            bson.D{{ "position_y", bson.D{{ "$lt", up       }}  }},
-        },
-    }})
-    if err != nil {
-        ret["status"] = "error"
-        ret["message"] = err.Error()
-        return ret
-    }
+	cursor, err := shops.Find(ctx, bson.D{{
+		"$and", []bson.D{
+			bson.D{{"position_x", bson.D{{"$gt", left}}}},
+			bson.D{{"position_x", bson.D{{"$lt", right}}}},
+			bson.D{{"position_y", bson.D{{"$gt", down}}}},
+			bson.D{{"position_y", bson.D{{"$lt", up}}}},
+		},
+	}})
+	if err != nil {
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
+	}
 
-    var results []bson.M
-    if err := cursor.All(context.TODO(), &results); err != nil {
-        ret["status"] = "error"
-        ret["message"] = err.Error()
-        return ret
-    }
-    ret["status"] = "success"
-    ret["shops_id"] = results
+	var results []bson.M
+	if err := cursor.All(context.TODO(), &results); err != nil {
+		ret["status"] = "error"
+		ret["message"] = err.Error()
+		return ret
+	}
+	ret["status"] = "success"
+	ret["shops_id"] = results
 	log.Println("results: ", ret["shops_id"])
 	fmt.Println("results: ", ret["shops_id"])
-    return ret
+	return ret
 }
 
 func RemoveShop(shopId string) map[string]interface{} {
@@ -159,7 +159,8 @@ func RemoveShop(shopId string) map[string]interface{} {
 	defer cancel()
 
 	ret := make(map[string]interface{})
-	res, err := shops.DeleteOne(ctx, bson.D{{"_id", shopId}})
+	objID, _ := primitive.ObjectIDFromHex(shopId)
+	res, err := shops.DeleteOne(ctx, bson.D{{"_id", objID}})
 	if err != nil {
 		ret["status"] = "error"
 		ret["message"] = err.Error()
