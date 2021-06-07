@@ -47,7 +47,7 @@ function LoginPage(props){
 
     return(
         <div>
-            <NavBar context='Login'/>
+            <NavBar context='Log in'/>
             <Grid container justify="center" alignItems="center" className={classes.container}>
                 <Grid item xs={5}>
                     {/* <Grid container justify="center">
@@ -93,19 +93,17 @@ function LoginPage(props){
                     <Grid container justify="center">
                         <Grid item>
                             <LineLogin
-                                clientID='1656068485'
-                                clientSecret='ae3916a5c3613378cda0ce5e879bf1bf'
-                                state='login'
-                                // nonce=''
-                                redirectURI='http://192.168.100.115:3000/home'
-                                scope='profile openid'
+                                clientID={process.env.REACT_APP_LINELOGIN_CLIENT_ID}
+                                clientSecret={process.env.REACT_APP_LINELOGIN_CLIENT_SECRET}
+                                state={process.env.REACT_APP_LINELOGIN_STATE}
+                                redirectURI={process.env.REACT_APP_LINELOGIN_REDIRECTURI}
+                                scope={process.env.REACT_APP_LINELOGIN_SCOPE}
                                 setPayload={setPayload}
                                 setIdToken={setIdToken}
                             />
                         </Grid>
                     </Grid>
                 </Grid>
-
             </Grid>
         </div>
     )

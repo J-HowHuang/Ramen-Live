@@ -40,9 +40,9 @@ function MainPage(props){
         let options = Qs.stringify({
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: 'http://192.168.100.115:3000/home',
-            client_id: '1656068485',
-            client_secret: 'ae3916a5c3613378cda0ce5e879bf1bf'
+            redirect_uri: process.env.REACT_APP_LINELOGIN_REDIRECTURI,
+            client_id: process.env.REACT_APP_LINELOGIN_CLIENT_ID,
+            client_secret: process.env.REACT_APP_LINELOGIN_CLIENT_SECRET
           })
         axios.post('https://api.line.me/oauth2/v2.1/token', options, { headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}).then(res => {
             access_token = res.data.access_token
@@ -53,9 +53,9 @@ function MainPage(props){
 
     return(
         <div>
-            <NavBar context='ramen live'/>
+            <NavBar context='Ramen Live'/>
             <SearchBar/>
-            {/* <TestBar/> */}
+            <TestBar/>
             <Divider/>
             <ShopList/>
         </div>

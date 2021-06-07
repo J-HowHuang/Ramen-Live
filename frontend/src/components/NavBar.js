@@ -61,7 +61,7 @@ export default function NavBar(props){
                     :
                     <Link component={RouterLink} to={"/login"} color="inherit" variant="body2" underline='none' className={classes.homepagebutton}>
                         <Button color="inherit" onClick={() => dispatch({type: "home"})}>
-                            <Typography variant="h6">login</Typography>
+                            <Typography variant="h6">登入</Typography>
                         </Button>
                     </Link>
                 }

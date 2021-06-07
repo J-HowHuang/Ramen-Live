@@ -7,9 +7,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import onMessage from './connection/onMessage'
-import {LineLogin} from 'reactjs-line-login'
 import 'reactjs-line-login/dist/index.css'
-import getLocation from './components/locationPermission';
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -37,7 +35,7 @@ function App() {
 
   useState(()=>{
     if(connection.isConnected === false){
-      const client = new WebSocket('wss://api.ramen-live.com/ws')
+      const client = new WebSocket(process.env.REACT_APP_SERVER_URL)
       client.addEventListener("open", ()=>{
         console.log("connected to server!")
         dispatch({type: 'connected', payload: { socket: client }})

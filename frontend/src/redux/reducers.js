@@ -1,5 +1,5 @@
 //  import { Redirect } from "react-router"
-import { getNearbyShops, getPosts, login } from '../connection/functions'
+import { getNearbyShops, getPosts } from '../connection/functions'
 
 const initialState = {
     connection: {
