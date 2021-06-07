@@ -55,7 +55,7 @@ function MainPage(props){
         <div>
             <NavBar context='Ramen Live'/>
             <SearchBar/>
-            <TestBar/>
+            {/* <TestBar/> */}
             <Divider/>
             <ShopList/>
         </div>
